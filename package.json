@@ -1,0 +1,32 @@
+{
+  "name": "reusable-fullstack-starter",
+  "version": "1.0.0",
+  "description": "Production-ready reusable full-stack starter template: React + Vite + Node.js + Express + Sequelize + MySQL",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "install:all": "npm install",
+    "dev": "concurrently --kill-others-on-fail --names \"BACKEND,FRONTEND\" --prefix-colors \"cyan,magenta\" \"npm run dev --workspace=backend\" \"npm run dev --workspace=frontend\"",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:backend": "npm run dev --workspace=backend",
+    "db:init": "npm run db:init --workspace=backend",
+    "build": "npm run build --workspace=frontend",
+    "postinstall": "node scripts/patch-cmd.cjs",
+    "lint": "npm run lint --workspace=frontend && npm run lint --workspace=backend",
+    "format": "prettier --write \"frontend/src/**/*.{js,jsx,css}\" \"backend/src/**/*.js\"",
+    "format:check": "prettier --check \"frontend/src/**/*.{js,jsx,css}\" \"backend/src/**/*.js\"",
+    "start:backend": "npm run start --workspace=backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "prettier": "^3.4.2",
+    "wrangler": "^4.151.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}

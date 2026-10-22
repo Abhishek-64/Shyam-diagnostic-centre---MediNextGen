@@ -1,0 +1,72 @@
+@reference "tailwindcss";
+
+.alert {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border-width: 1px;
+  border-style: solid;
+  font-size: var(--text-sm);
+}
+
+.icon {
+  font-weight: var(--font-bold);
+  font-size: var(--text-base);
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+.content {
+  flex: 1;
+}
+
+.title {
+  font-weight: var(--font-semibold);
+  margin-bottom: var(--space-1);
+}
+
+.body {
+  line-height: var(--leading-relaxed);
+}
+
+/* Variants */
+.success {
+  background-color: var(--color-success-bg);
+  border-color: var(--color-success-border);
+  color: #065f46;
+}
+
+.success .icon {
+  color: var(--color-success);
+}
+
+.error {
+  background-color: var(--color-error-bg);
+  border-color: var(--color-error-border);
+  color: #991b1b;
+}
+
+.error .icon {
+  color: var(--color-error);
+}
+
+.warning {
+  background-color: var(--color-warning-bg);
+  border-color: var(--color-warning-border);
+  color: #92400e;
+}
+
+.warning .icon {
+  color: var(--color-warning);
+}
+
+.info {
+  background-color: var(--color-info-bg);
+  border-color: var(--color-info-border);
+  color: #1e40af;
+}
+
+.info .icon {
+  color: var(--color-info);
+}

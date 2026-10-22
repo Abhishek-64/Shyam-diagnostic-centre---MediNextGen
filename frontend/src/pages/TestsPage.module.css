@@ -1,0 +1,161 @@
+@reference "tailwindcss";
+
+.pageContainer {
+  padding-bottom: 5rem;
+}
+
+.pageHeader {
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%);
+  padding: 3.5rem 0 2.5rem;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 3rem;
+}
+
+.overline {
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  color: var(--color-secondary-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.35rem;
+  display: block;
+}
+
+[data-theme='dark'] .overline {
+  color: var(--color-secondary-light);
+}
+
+.pageTitle {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: var(--font-extrabold);
+  color: var(--color-text);
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+}
+
+.pageSubtitle {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  max-width: 650px;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+.searchBarRow {
+  max-width: 650px;
+  margin-bottom: 1.75rem;
+}
+
+.categoryTabs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+}
+
+.categoryTabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tabBtn {
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.tabBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.activeTab {
+  background: var(--color-primary);
+  color: #ffffff !important;
+  border-color: var(--color-primary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.loadingBox {
+  text-align: center;
+  padding: 5rem 0;
+  color: var(--color-text-muted);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.emptyIcon {
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+
+.emptyState h3 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  margin-bottom: 0.5rem;
+}
+
+.emptyState p {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  margin-bottom: 1.5rem;
+}
+
+.resetBtn {
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-lg);
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 640px) {
+  .pageHeader {
+    padding: 2.25rem 0 1.75rem;
+    margin-bottom: 2rem;
+  }
+  .pageTitle {
+    font-size: 1.75rem;
+  }
+  .pageSubtitle {
+    font-size: var(--text-sm);
+    margin-bottom: 1.5rem;
+  }
+  .grid {
+    gap: 1rem;
+  }
+  .categoryTabs {
+    padding-bottom: 0.75rem;
+  }
+}

@@ -1,0 +1,125 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: var(--font-semibold);
+  border-radius: var(--radius-lg);
+  text-decoration: none !important;
+  transition: all var(--transition-base);
+  cursor: pointer;
+  white-space: nowrap;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .btn {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.35;
+  }
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+/* Variants */
+.solid {
+  background-color: var(--color-whatsapp);
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px 0 rgba(37, 211, 102, 0.35);
+}
+
+.solid:hover {
+  background-color: var(--color-whatsapp-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px 0 rgba(37, 211, 102, 0.45);
+}
+
+.outline {
+  background-color: transparent;
+  color: var(--color-whatsapp-dark) !important;
+  border: 1.5px solid var(--color-whatsapp);
+}
+
+[data-theme='dark'] .outline {
+  color: var(--color-whatsapp) !important;
+}
+
+.outline:hover {
+  background-color: var(--color-whatsapp-bg);
+}
+
+.pill {
+  background-color: var(--color-whatsapp);
+  color: #ffffff !important;
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 14px 0 rgba(37, 211, 102, 0.35);
+}
+
+.pill:hover {
+  background-color: var(--color-whatsapp-dark);
+}
+
+/* Icon only */
+.iconBtn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  border-radius: var(--radius-full) !important;
+  background-color: var(--color-whatsapp) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px 0 rgba(37, 211, 102, 0.35);
+  transition: all var(--transition-base);
+  flex-shrink: 0;
+  border: none;
+  text-decoration: none !important;
+}
+
+.iconBtn:hover {
+  background-color: var(--color-whatsapp-dark) !important;
+  transform: scale(1.08);
+}
+
+/* Sizes */
+.sm {
+  padding: 0.4rem 0.85rem;
+  font-size: var(--text-xs);
+}
+
+.md {
+  padding: 0.65rem 1.25rem;
+  font-size: var(--text-sm);
+}
+
+.lg {
+  padding: 0.85rem 1.75rem;
+  font-size: var(--text-base);
+}
+
+.iconBtn.sm {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  padding: 0 !important;
+}
+
+.iconBtn.md {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 !important;
+}
+
+.iconBtn.lg {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  min-height: 52px;
+  padding: 0 !important;
+}
