@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node --watch src/server.js",
+    "build": "echo 'Backend ready'",
     "start": "node src/server.js",
     "lint": "eslint src --ext .js --report-unused-disable-directives --max-warnings 0",
     "db:migrate": "npx sequelize-cli db:migrate",
