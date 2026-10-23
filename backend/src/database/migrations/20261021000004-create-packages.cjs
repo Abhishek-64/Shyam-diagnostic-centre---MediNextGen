@@ -59,6 +59,11 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
+      hasOfferBadge: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       isHomeCollectionAvailable: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
