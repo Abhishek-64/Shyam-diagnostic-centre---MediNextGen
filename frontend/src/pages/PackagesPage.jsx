@@ -7,6 +7,7 @@ import SearchBar from '../components/common/SearchBar.jsx';
 import Pagination from '../components/common/Pagination.jsx';
 import Modal from '../components/common/Modal.jsx';
 import EnquiryForm from '../components/forms/EnquiryForm.jsx';
+import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
 import styles from './PackagesPage.module.css';
 
 export default function PackagesPage() {
@@ -118,9 +119,12 @@ export default function PackagesPage() {
 
       <div className="container">
         {loading ? (
-          <div className={styles.loadingBox}>
-            <p>Loading verified health packages...</p>
-          </div>
+          <LoadingSpinner
+            size="lg"
+            label="Loading verified health packages…"
+            sublabel="Full body checkups, Vitamin profiles & Cardiology packages"
+            variant="center"
+          />
         ) : packages.length > 0 ? (
           <>
             <div className={styles.grid}>

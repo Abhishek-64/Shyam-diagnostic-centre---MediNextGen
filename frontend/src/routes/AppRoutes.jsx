@@ -32,6 +32,7 @@ import AdminTestsPage from '../pages/admin/AdminTestsPage.jsx';
 import AdminTestFormPage from '../pages/admin/AdminTestFormPage.jsx';
 import AdminCategoriesPage from '../pages/admin/AdminCategoriesPage.jsx';
 import AdminSettingsPage from '../pages/admin/AdminSettingsPage.jsx';
+import AdminAnalyticsPage from '../pages/admin/AdminAnalyticsPage.jsx';
 
 export default function AppRoutes() {
   return (
@@ -73,6 +74,7 @@ export default function AppRoutes() {
         <Route path="tests/new" element={<AdminTestFormPage />} />
         <Route path="tests/:id/edit" element={<AdminTestFormPage />} />
         <Route path="categories" element={<AdminCategoriesPage />} />
+        <Route path="analytics" element={<AdminAnalyticsPage />} />
         <Route path="settings" element={<AdminSettingsPage />} />
         <Route path="partners" element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="offers" element={<Navigate to="/admin/dashboard" replace />} />

@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ChevronLeft, Save, Loader2, FlaskConical } from 'lucide-react';
 import api from '../../services/api.js';
 import { useToast } from '../../context/ToastContext.jsx';
+import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
 import styles from './AdminPackageFormPage.module.css';
 
 export default function AdminTestFormPage() {
@@ -31,6 +32,10 @@ export default function AdminTestFormPage() {
     hasOfferBadge: false,
     isHomeCollectionAvailable: true,
     isPublished: true,
+    showPriceOnWebsite: true,
+    showSampleType: true,
+    showReportingTime: true,
+    showPreparationInstructions: true,
   });
 
   useEffect(() => {
@@ -70,6 +75,10 @@ export default function AdminTestFormPage() {
               hasOfferBadge: Boolean(t.hasOfferBadge),
               isHomeCollectionAvailable: t.isHomeCollectionAvailable !== false,
               isPublished: Boolean(t.isPublished),
+              showPriceOnWebsite: t.showPriceOnWebsite !== false,
+              showSampleType: t.showSampleType !== false,
+              showReportingTime: t.showReportingTime !== false,
+              showPreparationInstructions: t.showPreparationInstructions !== false,
             });
           }
         }
@@ -127,6 +136,10 @@ export default function AdminTestFormPage() {
         hasOfferBadge: form.hasOfferBadge,
         isHomeCollectionAvailable: form.isHomeCollectionAvailable,
         isPublished: form.isPublished,
+        showPriceOnWebsite: form.showPriceOnWebsite,
+        showSampleType: form.showSampleType,
+        showReportingTime: form.showReportingTime,
+        showPreparationInstructions: form.showPreparationInstructions,
       };
 
       if (isEdit) {
@@ -151,9 +164,8 @@ export default function AdminTestFormPage() {
 
   if (initialLoading) {
     return (
-      <div className={styles.loadingContainer}>
-        <Loader2 className="spin" size={32} />
-        <p>Loading test details...</p>
+      <div style={{ padding: '6rem 2rem', textAlign: 'center' }}>
+        <LoadingSpinner variant="center" label="Loading diagnostic test details…" />
       </div>
     );
   }
@@ -391,6 +403,68 @@ export default function AdminTestFormPage() {
               <span className={styles.checkboxText}>
                 <strong>Published on Public Website</strong>
                 <small>Make visible in search results, catalogue, and enquiry forms.</small>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        {/* Public Website Display Controls */}
+        <div className={styles.section}>
+          <h3>Public Website Display Controls</h3>
+          <p className={styles.sectionDesc}>
+            Customize which test details and options are shown to patients on the website cards and details page.
+          </p>
+
+          <div className={styles.checkboxGroup}>
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                name="showPriceOnWebsite"
+                checked={form.showPriceOnWebsite}
+                onChange={handleChange}
+              />
+              <span className={styles.checkboxText}>
+                <strong>Show Patient Fee / Rate on Website</strong>
+                <small>When unchecked, price is hidden and patients are prompted to "Contact Centre for Rate".</small>
+              </span>
+            </label>
+
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                name="showSampleType"
+                checked={form.showSampleType}
+                onChange={handleChange}
+              />
+              <span className={styles.checkboxText}>
+                <strong>Show Specimen / Sample Type</strong>
+                <small>Displays biological sample requirement (e.g. Whole Blood, Serum, Urine) to patients.</small>
+              </span>
+            </label>
+
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                name="showReportingTime"
+                checked={form.showReportingTime}
+                onChange={handleChange}
+              />
+              <span className={styles.checkboxText}>
+                <strong>Show Turnaround / Reporting Time</strong>
+                <small>Displays when test results are expected (e.g. Same Day, 24 Hours) on the catalogue.</small>
+              </span>
+            </label>
+
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                name="showPreparationInstructions"
+                checked={form.showPreparationInstructions}
+                onChange={handleChange}
+              />
+              <span className={styles.checkboxText}>
+                <strong>Show Preparation & Fasting Guidance</strong>
+                <small>Displays instructions on fasting or water intake to patients before visiting the laboratory.</small>
               </span>
             </label>
           </div>

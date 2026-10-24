@@ -20,6 +20,7 @@ import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import { env } from './config/env.js';
 import { errorHandler } from './middlewares/error.middleware.js';
+import { liveSecurityGuard } from './middlewares/liveSecurityGuard.middleware.js';
 import apiRoutes from './routes/index.js';
 import { sendError } from './utils/response.js';
 
@@ -103,7 +104,12 @@ app.use(cookieParser());
 app.use('/uploads', express.static(path.resolve(__dirname, '..', env.UPLOAD_DIR)));
 
 // ============================================================
-// 6. Routes
+// 6. MediNextGen Live Security Guard (Threat Detection & Auto-Ban)
+// ============================================================
+app.use(liveSecurityGuard);
+
+// ============================================================
+// 7. Routes
 // ============================================================
 app.use('/api/v1', apiRoutes);
 

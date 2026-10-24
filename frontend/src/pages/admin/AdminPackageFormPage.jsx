@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ChevronLeft, Save, Loader2, CheckSquare, Square, AlertCircle } from 'lucide-react';
+import { ChevronLeft, Save, Loader2, CheckSquare, Square, AlertCircle, Eye } from 'lucide-react';
 import api from '../../services/api.js';
 import { useToast } from '../../context/ToastContext.jsx';
+import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
 import styles from './AdminPackageFormPage.module.css';
 
 export default function AdminPackageFormPage() {
@@ -32,6 +33,10 @@ export default function AdminPackageFormPage() {
     priceVerified: false,
     isPublished: false,
     displayOrder: 0,
+    showPriceOnWebsite: true,
+    showOriginalPrice: true,
+    showFastDuration: true,
+    showReportTime: true,
     testIds: [],
   });
 
@@ -66,6 +71,10 @@ export default function AdminPackageFormPage() {
               priceVerified: Boolean(p.priceVerified),
               isPublished: Boolean(p.isPublished),
               displayOrder: p.displayOrder || 0,
+              showPriceOnWebsite: p.showPriceOnWebsite !== false,
+              showOriginalPrice: p.showOriginalPrice !== false,
+              showFastDuration: p.showFastDuration !== false,
+              showReportTime: p.showReportTime !== false,
               testIds: p.tests ? p.tests.map((t) => t.id) : [],
             });
           }
@@ -136,6 +145,10 @@ export default function AdminPackageFormPage() {
       priceVerified: form.priceVerified,
       isPublished: form.isPublished,
       displayOrder: parseInt(form.displayOrder, 10) || 0,
+      showPriceOnWebsite: form.showPriceOnWebsite,
+      showOriginalPrice: form.showOriginalPrice,
+      showFastDuration: form.showFastDuration,
+      showReportTime: form.showReportTime,
       testIds: form.testIds,
     };
 
@@ -166,8 +179,8 @@ export default function AdminPackageFormPage() {
 
   if (initialLoading) {
     return (
-      <div style={{ padding: '4rem', textAlign: 'center' }}>
-        <p>Loading package details...</p>
+      <div style={{ padding: '6rem 2rem', textAlign: 'center' }}>
+        <LoadingSpinner variant="center" label="Loading health package details…" />
       </div>
     );
   }
@@ -416,6 +429,71 @@ export default function AdminPackageFormPage() {
               <div>
                 <strong>Display Special Offer Badge</strong>
                 <p>Highlights this package with a prominent "Offer" badge on website cards.</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        {/* Public Website Display Controls */}
+        <div className={styles.section}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            <Eye size={20} color="#0d9488" />
+            <h3 style={{ margin: 0 }}>5. Public Website Display Controls</h3>
+          </div>
+          <p className={styles.sectionDesc}>
+            Choose exactly which data attributes are visible to public visitors on the website cards.
+          </p>
+
+          <div className={styles.checkboxGroup}>
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                name="showPriceOnWebsite"
+                checked={form.showPriceOnWebsite}
+                onChange={handleChange}
+              />
+              <div>
+                <strong>Show Discounted Selling Price (₹)</strong>
+                <p>If unchecked, shows &ldquo;Contact Centre for Rate&rdquo; on the card.</p>
+              </div>
+            </label>
+
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                name="showOriginalPrice"
+                checked={form.showOriginalPrice}
+                onChange={handleChange}
+              />
+              <div>
+                <strong>Show Original / MRP Strikethrough Price</strong>
+                <p>If unchecked, hides original strike-through rate and savings % badge.</p>
+              </div>
+            </label>
+
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                name="showFastDuration"
+                checked={form.showFastDuration}
+                onChange={handleChange}
+              />
+              <div>
+                <strong>Show Fasting Duration & Requirements</strong>
+                <p>Displays fasting guidance badges on the website package card.</p>
+              </div>
+            </label>
+
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                name="showReportTime"
+                checked={form.showReportTime}
+                onChange={handleChange}
+              />
+              <div>
+                <strong>Show Report Delivery Turnaround Time</strong>
+                <p>Displays expected report time (e.g. &ldquo;Within 24 Hours&rdquo;) on the card.</p>
               </div>
             </label>
           </div>

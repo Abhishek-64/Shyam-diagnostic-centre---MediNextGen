@@ -9,6 +9,7 @@ import publicOffersRoutes from './public/offers.routes.js';
 import publicServiceAreasRoutes from './public/serviceAreas.routes.js';
 import publicEnquiriesRoutes from './public/enquiries.routes.js';
 import publicSettingsRoutes from './public/settings.routes.js';
+import publicAnalyticsRoutes from './public/analytics.routes.js';
 import exampleRoutes from './examples.routes.js';
 
 // Admin routes
@@ -23,6 +24,7 @@ import adminPartnersRoutes from './admin/partners.routes.js';
 import adminEnquiriesRoutes from './admin/enquiries.routes.js';
 import adminSettingsRoutes from './admin/settings.routes.js';
 import adminAuditLogsRoutes from './admin/auditLogs.routes.js';
+import adminAnalyticsRoutes from './admin/analytics.routes.js';
 
 const router = Router();
 
@@ -38,6 +40,7 @@ router.use('/service-areas', publicServiceAreasRoutes);
 router.use('/enquiries', publicEnquiriesRoutes);
 router.use('/site-settings', publicSettingsRoutes);
 router.use('/settings', publicSettingsRoutes);
+router.use('/analytics', publicAnalyticsRoutes);
 router.use('/examples', exampleRoutes);
 
 // Admin API
@@ -52,5 +55,6 @@ router.use('/admin/partners', adminPartnersRoutes);
 router.use('/admin/enquiries', adminEnquiriesRoutes);
 router.use('/admin/settings', adminSettingsRoutes);
 router.use('/admin/audit-logs', adminAuditLogsRoutes);
+router.use('/admin/analytics', adminAnalyticsRoutes);
 
 export default router;

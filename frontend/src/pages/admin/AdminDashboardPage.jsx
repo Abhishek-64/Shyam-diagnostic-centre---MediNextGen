@@ -11,21 +11,31 @@ import {
   Plus,
   ShieldCheck,
   AlertTriangle,
+  Users,
 } from 'lucide-react';
 import api from '../../services/api.js';
+import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
 import styles from './AdminDashboardPage.module.css';
 
 export default function AdminDashboardPage() {
   const [data, setData] = useState(null);
+  const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadDashboard() {
       try {
         setLoading(true);
-        const res = await api.get('/admin/dashboard/stats');
-        if (res.data?.success) {
-          setData(res.data.data);
+        const [statsRes, analyticsRes] = await Promise.allSettled([
+          api.get('/admin/dashboard/stats'),
+          api.get('/admin/analytics/overview'),
+        ]);
+
+        if (statsRes.status === 'fulfilled' && statsRes.value?.data?.success) {
+          setData(statsRes.value.data.data);
+        }
+        if (analyticsRes.status === 'fulfilled' && analyticsRes.value?.data?.success) {
+          setAnalytics(analyticsRes.value.data.data);
         }
       } catch (err) {
         console.error('Failed to load dashboard stats', err);
@@ -36,8 +46,17 @@ export default function AdminDashboardPage() {
     loadDashboard();
   }, []);
 
+  if (loading) {
+    return (
+      <div style={{ padding: '6rem 2rem', textAlign: 'center' }}>
+        <LoadingSpinner variant="center" label="Loading operational dashboard & patient stats…" />
+      </div>
+    );
+  }
+
   const stats = data?.stats || {};
   const recentEnquiries = data?.recentEnquiries || [];
+  const trafficSummary = analytics?.summary || {};
 
   return (
     <div className={styles.dashboard}>
@@ -108,6 +127,24 @@ export default function AdminDashboardPage() {
           <span className={styles.statNumber}>{stats.totalTests ?? 0}</span>
           <span className={styles.statSub}>{stats.activeOffers ?? 0} active discount offers</span>
         </div>
+
+        <Link
+          to="/admin/analytics"
+          className={styles.statCard}
+          style={{ textDecoration: 'none', cursor: 'pointer' }}
+          title="Click to view full visitor analytics"
+        >
+          <div className={styles.statTop}>
+            <span className={styles.statLabel}>Today's Unique Visitors</span>
+            <div className={`${styles.iconWrap} ${styles.blueIcon}`}>
+              <Users size={20} />
+            </div>
+          </div>
+          <span className={styles.statNumber}>{trafficSummary.todayUniqueVisitors ?? 0}</span>
+          <span className={styles.statSub}>
+            {trafficSummary.todayViews ?? 0} views today • View Analytics →
+          </span>
+        </Link>
       </div>
 
       {/* Recent Enquiries Table Section */}

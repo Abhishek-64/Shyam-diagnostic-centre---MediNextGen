@@ -17,6 +17,7 @@ import VerificationBadge from '../components/common/VerificationBadge.jsx';
 import WhatsAppButton from '../components/common/WhatsAppButton.jsx';
 import Modal from '../components/common/Modal.jsx';
 import EnquiryForm from '../components/forms/EnquiryForm.jsx';
+import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
 import styles from './PackageDetailsPage.module.css';
 
 export default function PackageDetailsPage() {
@@ -47,7 +48,7 @@ export default function PackageDetailsPage() {
   if (loading) {
     return (
       <div className="container" style={{ padding: '6rem 0', textAlign: 'center' }}>
-        <p>Loading package details...</p>
+        <LoadingSpinner variant="center" label="Loading health checkup package details…" />
       </div>
     );
   }
@@ -193,7 +194,7 @@ export default function PackageDetailsPage() {
               <div className={styles.cardActions}>
                 <button onClick={() => setModalOpen(true)} className={styles.bookNowBtn}>
                   <Calendar size={18} />
-                  <span>Book Home Visit</span>
+                  <span>Book Visit</span>
                 </button>
 
                 <WhatsAppButton

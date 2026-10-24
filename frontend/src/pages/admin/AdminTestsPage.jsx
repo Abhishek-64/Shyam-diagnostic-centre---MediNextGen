@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FlaskConical, Plus, Search, Edit, Trash2, CheckCircle2, XCircle } from 'lucide-react';
+import { FlaskConical, Plus, Search, Edit, Trash2, CheckCircle2, XCircle, Upload } from 'lucide-react';
 import api from '../../services/api.js';
 import PriceDisplay from '../../components/common/PriceDisplay.jsx';
 import Pagination from '../../components/common/Pagination.jsx';
+import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
+import BulkCsvModal from '../../components/common/BulkCsvModal.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
 import styles from './AdminPackagesPage.module.css'; // Reusable table styling
 
@@ -13,6 +15,7 @@ export default function AdminTestsPage() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [meta, setMeta] = useState({ page: 1, totalPages: 1, total: 0 });
+  const [showCsvModal, setShowCsvModal] = useState(false);
 
   const toast = useToast();
 
@@ -60,9 +63,19 @@ export default function AdminTestsPage() {
           </p>
         </div>
 
-        <Link to="/admin/tests/new" className={styles.createBtn}>
-          <Plus size={16} /> Create New Test
-        </Link>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <button
+            type="button"
+            onClick={() => setShowCsvModal(true)}
+            className={styles.verifyBtn}
+            style={{ padding: '0.65rem 1rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+          >
+            <Upload size={16} /> Bulk Import (CSV)
+          </button>
+          <Link to="/admin/tests/new" className={styles.createBtn}>
+            <Plus size={16} /> Create New Test
+          </Link>
+        </div>
       </div>
 
       <div className={styles.searchBarRow}>
@@ -96,11 +109,7 @@ export default function AdminTestsPage() {
             </thead>
             <tbody>
               {loading ? (
-                <tr>
-                  <td colSpan={6} className={styles.loadingCell}>
-                    Loading tests...
-                  </td>
-                </tr>
+                <LoadingSpinner variant="table" colSpan={6} label="Loading tests catalogue…" />
               ) : tests.length > 0 ? (
                 tests.map((test) => (
                   <tr key={test.id}>
@@ -175,6 +184,18 @@ export default function AdminTestsPage() {
           onPageChange={(p) => setPage(p)}
         />
       </div>
+
+      <BulkCsvModal
+        isOpen={showCsvModal}
+        onClose={() => setShowCsvModal(false)}
+        title="Bulk Import Diagnostic Tests"
+        sampleDownloadUrl="/admin/tests/sample-csv"
+        sampleFilename="sample_tests.csv"
+        uploadEndpoint="/admin/tests/bulk-csv"
+        onSuccess={() => {
+          fetchTests();
+        }}
+      />
     </div>
   );
 }

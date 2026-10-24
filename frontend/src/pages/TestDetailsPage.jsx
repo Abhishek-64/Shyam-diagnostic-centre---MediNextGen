@@ -16,6 +16,7 @@ import PriceDisplay from '../components/common/PriceDisplay.jsx';
 import WhatsAppButton from '../components/common/WhatsAppButton.jsx';
 import Modal from '../components/common/Modal.jsx';
 import EnquiryForm from '../components/forms/EnquiryForm.jsx';
+import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
 import styles from './TestDetailsPage.module.css';
 
 export default function TestDetailsPage() {
@@ -46,7 +47,7 @@ export default function TestDetailsPage() {
   if (loading) {
     return (
       <div className="container" style={{ padding: '6rem 0', textAlign: 'center' }}>
-        <p>Loading test information...</p>
+        <LoadingSpinner variant="center" label="Loading diagnostic test details…" />
       </div>
     );
   }

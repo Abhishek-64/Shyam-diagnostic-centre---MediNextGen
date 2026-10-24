@@ -15,4 +15,8 @@ export const testSchema = z.object({
   hasOfferBadge: z.boolean().default(false),
   isHomeCollectionAvailable: z.boolean().default(true),
   isPublished: z.boolean().default(false),
+  showPriceOnWebsite: z.boolean().default(true),
+  showSampleType: z.boolean().default(true),
+  showReportingTime: z.boolean().default(true),
+  showPreparationInstructions: z.boolean().default(true),
 });

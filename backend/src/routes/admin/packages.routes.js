@@ -7,6 +7,8 @@ import {
   verifyAdminPackage,
   publishAdminPackage,
   deleteAdminPackage,
+  bulkImportPackagesFromCsv,
+  getSamplePackagesCsv,
 } from '../../controllers/admin/packages.controller.js';
 import { authenticateAdmin } from '../../middlewares/auth.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
@@ -15,6 +17,9 @@ import { packageSchema } from '../../validators/package.validator.js';
 const router = Router();
 
 router.use(authenticateAdmin);
+
+router.get('/sample-csv', getSamplePackagesCsv);
+router.post('/bulk-csv', bulkImportPackagesFromCsv);
 
 router.get('/', getAdminPackages);
 router.get('/:id', getAdminPackageById);

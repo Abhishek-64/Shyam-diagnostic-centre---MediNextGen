@@ -11,11 +11,14 @@ import {
   CheckCircle2,
   XCircle,
   AlertTriangle,
+  Upload,
 } from 'lucide-react';
 import api from '../../services/api.js';
 import PriceDisplay from '../../components/common/PriceDisplay.jsx';
 import VerificationBadge from '../../components/common/VerificationBadge.jsx';
 import Pagination from '../../components/common/Pagination.jsx';
+import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
+import BulkCsvModal from '../../components/common/BulkCsvModal.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
 import styles from './AdminPackagesPage.module.css';
 
@@ -25,6 +28,7 @@ export default function AdminPackagesPage() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [meta, setMeta] = useState({ page: 1, totalPages: 1, total: 0 });
+  const [showCsvModal, setShowCsvModal] = useState(false);
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -106,9 +110,19 @@ export default function AdminPackagesPage() {
           </p>
         </div>
 
-        <Link to="/admin/packages/new" className={styles.createBtn}>
-          <Plus size={16} /> Create New Package
-        </Link>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <button
+            type="button"
+            onClick={() => setShowCsvModal(true)}
+            className={styles.verifyBtn}
+            style={{ padding: '0.65rem 1rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+          >
+            <Upload size={16} /> Bulk Import (CSV)
+          </button>
+          <Link to="/admin/packages/new" className={styles.createBtn}>
+            <Plus size={16} /> Create New Package
+          </Link>
+        </div>
       </div>
 
       {/* Search Bar */}
@@ -144,11 +158,7 @@ export default function AdminPackagesPage() {
             </thead>
             <tbody>
               {loading ? (
-                <tr>
-                  <td colSpan={6} className={styles.loadingCell}>
-                    Loading packages...
-                  </td>
-                </tr>
+                <LoadingSpinner variant="table" colSpan={6} label="Loading health packages database…" />
               ) : packages.length > 0 ? (
                 packages.map((pkg) => (
                   <tr key={pkg.id}>
@@ -243,6 +253,18 @@ export default function AdminPackagesPage() {
           onPageChange={(p) => setPage(p)}
         />
       </div>
+
+      <BulkCsvModal
+        isOpen={showCsvModal}
+        onClose={() => setShowCsvModal(false)}
+        title="Bulk Import Health Checkup Packages"
+        sampleDownloadUrl="/admin/packages/sample-csv"
+        sampleFilename="sample_packages.csv"
+        uploadEndpoint="/admin/packages/bulk-csv"
+        onSuccess={() => {
+          fetchPackages();
+        }}
+      />
     </div>
   );
 }

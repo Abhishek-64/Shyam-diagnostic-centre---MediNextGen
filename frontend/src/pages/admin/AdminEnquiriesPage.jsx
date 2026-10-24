@@ -15,6 +15,7 @@ import {
 import api from '../../services/api.js';
 import Pagination from '../../components/common/Pagination.jsx';
 import Modal from '../../components/common/Modal.jsx';
+import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
 import styles from './AdminEnquiriesPage.module.css';
 
@@ -184,11 +185,7 @@ export default function AdminEnquiriesPage() {
             </thead>
             <tbody>
               {loading ? (
-                <tr>
-                  <td colSpan={9} className={styles.loadingCell}>
-                    Loading enquiries...
-                  </td>
-                </tr>
+                <LoadingSpinner variant="table" colSpan={9} label="Loading patient enquiries & appointments…" />
               ) : enquiries.length > 0 ? (
                 enquiries.map((enq) => {
                   const item = enq.package?.name || enq.test?.name || 'General Inquiry';
@@ -280,7 +277,9 @@ export default function AdminEnquiriesPage() {
         maxWidth="680px"
       >
         {detailLoading || !selectedEnquiry ? (
-          <p style={{ textAlign: 'center', padding: '2rem' }}>Loading details...</p>
+          <div style={{ padding: '3rem 1rem', textAlign: 'center' }}>
+            <LoadingSpinner variant="center" label="Fetching enquiry timeline & clinical payload…" />
+          </div>
         ) : (
           <div className={styles.modalContent}>
             <div className={styles.modalHeaderRow}>

@@ -81,6 +81,26 @@ export default function definePackage(sequelize) {
         allowNull: false,
         defaultValue: false,
       },
+      showPriceOnWebsite: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+      showOriginalPrice: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+      showFastDuration: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+      showReportTime: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
       displayOrder: {
         type: DataTypes.INTEGER,
         allowNull: false,

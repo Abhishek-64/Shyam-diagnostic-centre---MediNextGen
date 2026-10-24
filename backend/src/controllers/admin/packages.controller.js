@@ -120,6 +120,10 @@ export async function createAdminPackage(req, res, next) {
       priceVerified: priceVerified || false,
       isPublished: finalPublished || false,
       displayOrder: displayOrder || 0,
+      showPriceOnWebsite: req.body.showPriceOnWebsite ?? true,
+      showOriginalPrice: req.body.showOriginalPrice ?? true,
+      showFastDuration: req.body.showFastDuration ?? true,
+      showReportTime: req.body.showReportTime ?? true,
     });
 
     if (Array.isArray(testIds) && testIds.length > 0) {
@@ -205,6 +209,10 @@ export async function updateAdminPackage(req, res, next) {
     if (priceVerified !== undefined) pkg.priceVerified = priceVerified;
     if (isPublished !== undefined) pkg.isPublished = isPublished;
     if (displayOrder !== undefined) pkg.displayOrder = displayOrder;
+    if (req.body.showPriceOnWebsite !== undefined) pkg.showPriceOnWebsite = Boolean(req.body.showPriceOnWebsite);
+    if (req.body.showOriginalPrice !== undefined) pkg.showOriginalPrice = Boolean(req.body.showOriginalPrice);
+    if (req.body.showFastDuration !== undefined) pkg.showFastDuration = Boolean(req.body.showFastDuration);
+    if (req.body.showReportTime !== undefined) pkg.showReportTime = Boolean(req.body.showReportTime);
 
     await pkg.save();
 
@@ -315,3 +323,140 @@ export async function deleteAdminPackage(req, res, next) {
     return next(error);
   }
 }
+
+export async function bulkImportPackagesFromCsv(req, res, next) {
+  try {
+    const { rows, csvText } = req.body;
+    let dataRows = Array.isArray(rows) ? rows : [];
+    if (dataRows.length === 0 && csvText) {
+      const { parseCsvString } = await import('../../utils/csv.js');
+      dataRows = parseCsvString(csvText);
+    }
+
+    if (!dataRows || dataRows.length === 0) {
+      return res.status(400).json({ success: false, message: 'No valid data rows found in CSV.' });
+    }
+
+    let createdCount = 0;
+    let updatedCount = 0;
+    const errors = [];
+
+    for (let i = 0; i < dataRows.length; i++) {
+      const row = dataRows[i];
+      const name = (row.name || row.packageName || row.PackageName || '').trim();
+      if (!name) {
+        errors.push(`Row ${i + 1}: Package name is required. Skipped.`);
+        continue;
+      }
+
+      const rawPrice = parseFloat(row.priceRupees || row.price || '0');
+      const priceInPaise = isNaN(rawPrice) ? 0 : Math.round(rawPrice * 100);
+
+      const rawOriginalPrice = parseFloat(row.originalPriceRupees || row.mrp || row.originalPrice || '0');
+      const originalPriceInPaise = isNaN(rawOriginalPrice) || rawOriginalPrice <= 0 ? null : Math.round(rawOriginalPrice * 100);
+
+      const parametersCovered = parseInt(row.parametersCovered || row.testsCount || '0', 10) || 0;
+      const subtitle = (row.subtitle || '').trim();
+      const description = (row.description || '').trim();
+      const fastDuration = row.fastDuration || '10-12 hours fasting required';
+      const reportTime = row.reportTime || 'Same Day / 24 Hours';
+
+      const isPopular = String(row.isPopular).toLowerCase() === 'true';
+      const isFeatured = String(row.isFeatured).toLowerCase() === 'true';
+      const hasOfferBadge = String(row.hasOfferBadge).toLowerCase() === 'true';
+      const isHomeCollectionAvailable = row.isHomeCollectionAvailable === undefined || String(row.isHomeCollectionAvailable).toLowerCase() !== 'false';
+      const priceVerified = row.priceVerified === undefined || String(row.priceVerified).toLowerCase() !== 'false';
+      const isPublished = row.isPublished === undefined || String(row.isPublished).toLowerCase() !== 'false';
+
+      const showPriceOnWebsite = row.showPriceOnWebsite === undefined || String(row.showPriceOnWebsite).toLowerCase() !== 'false';
+      const showOriginalPrice = row.showOriginalPrice === undefined || String(row.showOriginalPrice).toLowerCase() !== 'false';
+      const showFastDuration = row.showFastDuration === undefined || String(row.showFastDuration).toLowerCase() !== 'false';
+      const showReportTime = row.showReportTime === undefined || String(row.showReportTime).toLowerCase() !== 'false';
+
+      const existing = await Package.findOne({ where: { name } });
+
+      if (existing) {
+        existing.subtitle = subtitle || existing.subtitle;
+        existing.description = description || existing.description;
+        existing.parametersCovered = parametersCovered || existing.parametersCovered;
+        existing.fastDuration = fastDuration;
+        existing.reportTime = reportTime;
+        existing.priceInPaise = priceInPaise;
+        existing.originalPriceInPaise = originalPriceInPaise;
+        existing.isPopular = isPopular;
+        existing.isFeatured = isFeatured;
+        existing.hasOfferBadge = hasOfferBadge;
+        existing.isHomeCollectionAvailable = isHomeCollectionAvailable;
+        existing.priceVerified = priceVerified;
+        existing.isPublished = isPublished;
+        existing.showPriceOnWebsite = showPriceOnWebsite;
+        existing.showOriginalPrice = showOriginalPrice;
+        existing.showFastDuration = showFastDuration;
+        existing.showReportTime = showReportTime;
+        await existing.save();
+        updatedCount++;
+      } else {
+        let baseSlug = createSlug(name);
+        let slug = baseSlug;
+        let count = 1;
+        while (await Package.findOne({ where: { slug } })) {
+          slug = `${baseSlug}-${count++}`;
+        }
+
+        await Package.create({
+          name,
+          slug,
+          subtitle,
+          description,
+          parametersCovered,
+          fastDuration,
+          reportTime,
+          priceInPaise,
+          originalPriceInPaise,
+          isPopular,
+          isFeatured,
+          hasOfferBadge,
+          isHomeCollectionAvailable,
+          priceVerified,
+          isPublished,
+          displayOrder: createdCount + 1,
+          showPriceOnWebsite,
+          showOriginalPrice,
+          showFastDuration,
+          showReportTime,
+        });
+        createdCount++;
+      }
+    }
+
+    await recordAuditLog({
+      action: 'packages.bulk_csv_import',
+      entityType: 'Package',
+      entityId: 0,
+      details: { createdCount, updatedCount, totalProcessed: dataRows.length },
+      req,
+    });
+
+    return sendSuccess(res, {
+      total: dataRows.length,
+      created: createdCount,
+      updated: updatedCount,
+      errors,
+    }, `Bulk CSV import completed: ${createdCount} created, ${updatedCount} updated.`);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function getSamplePackagesCsv(req, res) {
+  const sampleCsv = `name,subtitle,priceRupees,originalPriceRupees,parametersCovered,fastDuration,reportTime,isPopular,isFeatured,hasOfferBadge,showPriceOnWebsite,isPublished
+"Shyam Full Body Advanced Profile","Comprehensive Vital Organ Health Screening with 92 Tests",1499,3500,92,"10-12 hours fasting required","Same Day / 24 Hours",true,true,true,true,true
+"Vitamin Gold Health Checkup","Essential Vitamin D3 & B12 Screening with CBC",999,2200,45,"No fasting required","Same Day (6 to 8 Hours)",true,false,false,true,true
+"Healthy Hearty NCR-Delhi Profile","Lipid Profile, Cardiac Risk Markers & Blood Glucose",2200,4500,68,"12 hours overnight fasting mandatory","Same Day / 24 Hours",false,true,true,true,true
+"Executive Diabetic Wellness Package","Complete Diabetes Monitoring (HbA1c, Fasting, Post-Meal, Microalbumin)",850,1800,32,"Fasting sample required","Same Day (4 Hours)",true,false,false,true,true`;
+
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', 'attachment; filename="sample_health_packages.csv"');
+  return res.status(200).send(sampleCsv);
+}
+

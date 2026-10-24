@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Loader2, Phone, MessageSquare, MapPin, Clock, Mail, ShieldAlert } from 'lucide-react';
+import { Save, Loader2, Phone, MessageSquare, MapPin, Clock, Mail, ShieldAlert, Share2, Globe } from 'lucide-react';
+import { InstagramIcon, FacebookIcon } from '../../components/common/SocialIcons.jsx';
 import api from '../../services/api.js';
 import { useToast } from '../../context/ToastContext.jsx';
+import { useSettings } from '../../context/SettingsContext.jsx';
 import styles from './AdminSettingsPage.module.css';
 
 export default function AdminSettingsPage() {
@@ -10,6 +12,7 @@ export default function AdminSettingsPage() {
   const [settingsMap, setSettingsMap] = useState({});
 
   const toast = useToast();
+  const { refreshSettings } = useSettings();
 
   const fetchSettings = async () => {
     try {
@@ -51,6 +54,7 @@ export default function AdminSettingsPage() {
           settingValue: settingsMap[k],
         });
       }
+      await refreshSettings();
       toast.success('System settings saved successfully');
     } catch (err) {
       toast.error('Failed to save some settings');
@@ -194,6 +198,61 @@ export default function AdminSettingsPage() {
             <span className={styles.settingMeta}>
               Patients booking from these PINs receive complimentary sample pickup.
             </span>
+          </div>
+        </div>
+
+        {/* Social Media & External Channels (Editable) */}
+        <div className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <Share2 size={18} color="var(--color-primary)" />
+            <h3 className={styles.sectionTitle}>Social Media & Map Links (Public Portal)</h3>
+          </div>
+          <p className={styles.sectionDesc}>
+            These official links appear in the website footer, contact page, and communication links.
+          </p>
+
+          <div className={styles.grid2}>
+            <div className={styles.field}>
+              <label className={styles.label}>
+                <InstagramIcon size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+                Instagram Official Profile URL
+              </label>
+              <input
+                type="url"
+                value={settingsMap.instagram_url || ''}
+                onChange={(e) => handleChange('instagram_url', e.target.value)}
+                placeholder="https://www.instagram.com/shyam.diagnosticscentre?..."
+                className={styles.input}
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.label}>
+                <FacebookIcon size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+                Facebook Official Page URL
+              </label>
+              <input
+                type="url"
+                value={settingsMap.facebook_url || ''}
+                onChange={(e) => handleChange('facebook_url', e.target.value)}
+                placeholder="https://www.facebook.com/share/..."
+                className={styles.input}
+              />
+            </div>
+          </div>
+
+          <div className={styles.field}>
+            <label className={styles.label}>
+              <Globe size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+              Google Maps Location Link
+            </label>
+            <input
+              type="url"
+              value={settingsMap.google_maps_url || ''}
+              onChange={(e) => handleChange('google_maps_url', e.target.value)}
+              placeholder="https://maps.app.goo.gl/..."
+              className={styles.input}
+            />
           </div>
         </div>
 

@@ -1,35 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { MapPin, Phone, Mail, Clock, MessageCircle, HelpCircle, ExternalLink } from 'lucide-react';
-import api from '../services/api.js';
+import { InstagramIcon, FacebookIcon } from '../components/common/SocialIcons.jsx';
 import EnquiryForm from '../components/forms/EnquiryForm.jsx';
 import WhatsAppButton from '../components/common/WhatsAppButton.jsx';
+import { useSettings } from '../context/SettingsContext.jsx';
 import styles from './ContactPage.module.css';
 
 export default function ContactPage() {
-  const [siteSettings, setSiteSettings] = useState({
-    business_address: '235/G1, Gali No. 4, Shyam Park Main, Sahibabad, Ghaziabad, Uttar Pradesh - 201005, India',
-    phone_number: '+91 8320740996',
-    whatsapp_number: '8320740996',
-    email_contact: 'vadoliyaakshy@gmail.com',
-    business_hours: 'Monday – Saturday: 7:00 AM – 9:00 PM | Sunday: 7:00 AM – 1:00 PM',
-    google_maps_url: 'https://share.google/zqFsm7Lt0qOeluRsy',
-  });
-
-  useEffect(() => {
-    async function fetchSettings() {
-      try {
-        const res = await api.get('/settings');
-        if (res.data?.success && res.data.data) {
-          setSiteSettings((prev) => ({ ...prev, ...res.data.data }));
-        }
-      } catch (err) {
-        // Fallback to initial defaults
-      }
-    }
-    fetchSettings();
-  }, []);
-
-  const googleMapUrl = siteSettings.google_maps_url || 'https://share.google/zqFsm7Lt0qOeluRsy';
+  const { settings: siteSettings } = useSettings();
+  const googleMapUrl = siteSettings.google_maps_url || 'https://maps.app.goo.gl/zqFsm7Lt0qOeluRsy';
 
   return (
     <div className={styles.pageContainer}>
@@ -124,6 +103,39 @@ export default function ContactPage() {
                 </p>
               </div>
             </div>
+
+            {(siteSettings.instagram_url || siteSettings.facebook_url) && (
+              <div className={styles.infoCard}>
+                <div className={styles.infoIconBox}>
+                  <InstagramIcon size={22} />
+                </div>
+                <div>
+                  <h3>Official Social Channels</h3>
+                  <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.35rem', flexWrap: 'wrap' }}>
+                    {siteSettings.instagram_url && (
+                      <a
+                        href={siteSettings.instagram_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.9rem' }}
+                      >
+                        <InstagramIcon size={16} /> Instagram <ExternalLink size={12} />
+                      </a>
+                    )}
+                    {siteSettings.facebook_url && (
+                      <a
+                        href={siteSettings.facebook_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.9rem' }}
+                      >
+                        <FacebookIcon size={16} /> Facebook <ExternalLink size={12} />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Form */}

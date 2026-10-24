@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import { Clock, ShieldCheck, Activity, ArrowRight, Sparkles } from 'lucide-react';
 import PriceDisplay from '../common/PriceDisplay.jsx';
 import VerificationBadge from '../common/VerificationBadge.jsx';
-import WhatsAppButton from '../common/WhatsAppButton.jsx';
+import { useSettings } from '../../context/SettingsContext.jsx';
 import styles from './PackageCard.module.css';
 
 export default function PackageCard({ pkg, onBookClick }) {
+  const { settings } = useSettings();
   if (!pkg) return null;
 
   return (
@@ -38,13 +39,13 @@ export default function PackageCard({ pkg, onBookClick }) {
       </div>
 
       <div className={styles.features}>
-        {pkg.fastDuration && (
+        {pkg.showFastDuration !== false && pkg.fastDuration && (
           <div className={styles.featureItem}>
             <Clock size={14} className={styles.featureIcon} />
             <span>{pkg.fastDuration}</span>
           </div>
         )}
-        {pkg.reportTime && (
+        {pkg.showReportTime !== false && pkg.reportTime && (
           <div className={styles.featureItem}>
             <ShieldCheck size={14} className={styles.featureIcon} />
             <span>Report: {pkg.reportTime}</span>
@@ -53,12 +54,18 @@ export default function PackageCard({ pkg, onBookClick }) {
       </div>
 
       <div className={styles.priceSection}>
-        <PriceDisplay
-          priceInPaise={pkg.priceInPaise}
-          originalPriceInPaise={pkg.originalPriceInPaise}
-          isVerified={pkg.priceVerified}
-          size="md"
-        />
+        {pkg.showPriceOnWebsite !== false ? (
+          <PriceDisplay
+            priceInPaise={pkg.priceInPaise}
+            originalPriceInPaise={pkg.showOriginalPrice !== false ? pkg.originalPriceInPaise : null}
+            isVerified={pkg.priceVerified}
+            size="md"
+          />
+        ) : (
+          <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-primary)' }}>
+            Custom Pricing (Contact Centre)
+          </span>
+        )}
       </div>
 
       <div className={styles.actions}>
@@ -66,11 +73,11 @@ export default function PackageCard({ pkg, onBookClick }) {
           onClick={() => (onBookClick ? onBookClick(pkg) : null)}
           className={styles.bookBtn}
         >
-          Book Home Visit
+          Book Visit
         </button>
 
         <WhatsAppButton
-          phone="8320740996"
+          phone={settings.whatsapp_number}
           message={`Hello Shyam Diagnostic, I am interested in booking the *${pkg.name}* package.`}
           variant="iconOnly"
           size="md"

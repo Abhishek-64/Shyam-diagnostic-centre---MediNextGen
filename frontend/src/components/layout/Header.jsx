@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Phone, MessageCircle, Menu, X, Calendar, Activity, ChevronRight, Sparkles } from 'lucide-react';
+import { InstagramIcon, FacebookIcon } from '../common/SocialIcons.jsx';
 import ThemeToggle from '../common/ThemeToggle.jsx';
 import WhatsAppButton from '../common/WhatsAppButton.jsx';
+import { useSettings } from '../../context/SettingsContext.jsx';
 import styles from './Header.module.css';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const { settings } = useSettings();
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -24,6 +27,8 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const cleanPhone = (settings.phone_number || '8320740996').replace(/\D/g, '');
+
   return (
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
       {/* Top quick announcement bar */}
@@ -35,11 +40,36 @@ export default function Header() {
             </span>
           </div>
           <div className={styles.topBarRight}>
-            <a href="tel:8320740996" className={styles.topContactLink}>
-              <Phone size={13} /> Call: +91 8320740996
+            <a href={`tel:${cleanPhone}`} className={styles.topContactLink}>
+              <Phone size={13} /> Call: {settings.phone_number}
             </a>
             <span className={styles.divider}>•</span>
-            <span className={styles.hours}>Sahibabad, Ghaziabad (Mon–Sat: 7 AM – 9 PM)</span>
+            <span className={styles.hours}>{settings.business_hours}</span>
+            {settings.instagram_url && (
+              <>
+                <span className={styles.divider}>•</span>
+                <a
+                  href={settings.instagram_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.topContactLink}
+                  title="Follow Shyam Diagnostic on Instagram"
+                >
+                  <InstagramIcon size={14} />
+                </a>
+              </>
+            )}
+            {settings.facebook_url && (
+              <a
+                href={settings.facebook_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.topContactLink}
+                title="Follow Shyam Diagnostic on Facebook"
+              >
+                <FacebookIcon size={14} />
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -49,7 +79,7 @@ export default function Header() {
         {/* Brand Logo & Name with official asset logo */}
         <Link to="/" className={styles.brand} title="Shyam Diagnostic Centre & MediNextGen Healthcare">
           <img
-            src="/logo.svg"
+            src="/logo.png"
             alt="Shyam Diagnostic Centre & MediNextGen Healthcare Logo"
             className={styles.brandLogoImg}
           />
@@ -152,14 +182,14 @@ export default function Header() {
                 <Calendar size={18} /> View Health Packages
               </Link>
               <WhatsAppButton
-                phone="8320740996"
+                phone={settings.whatsapp_number}
                 variant="solid"
                 size="md"
                 label="Direct WhatsApp Consultation"
                 message="Hello Shyam Diagnostic Centre, I would like to enquire about diagnostic test booking."
               />
-              <a href="tel:8320740996" className={styles.mobileCallBtn}>
-                <Phone size={18} /> Call +91 8320740996
+              <a href={`tel:${cleanPhone}`} className={styles.mobileCallBtn}>
+                <Phone size={18} /> Call {settings.phone_number}
               </a>
             </div>
           </nav>

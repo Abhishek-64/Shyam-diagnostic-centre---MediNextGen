@@ -22,6 +22,7 @@ import defineEnquiryNote from '../../models/EnquiryNote.js';
 import defineAuditLog from '../../models/AuditLog.js';
 import defineSiteSettings from '../../models/SiteSettings.js';
 import defineExampleRecord from '../../models/ExampleRecord.js';
+import definePageView from '../../models/PageView.js';
 
 // 1. Initialise all models
 const AdminUser = defineAdminUser(sequelize);
@@ -39,6 +40,7 @@ const EnquiryNote = defineEnquiryNote(sequelize);
 const AuditLog = defineAuditLog(sequelize);
 const SiteSettings = defineSiteSettings(sequelize);
 const ExampleRecord = defineExampleRecord(sequelize);
+const PageView = definePageView(sequelize);
 
 const models = {
   AdminUser,
@@ -56,6 +58,7 @@ const models = {
   AuditLog,
   SiteSettings,
   ExampleRecord,
+  PageView,
 };
 
 // 2. Register associations after all models are initialised
@@ -82,6 +85,7 @@ export {
   AuditLog,
   SiteSettings,
   ExampleRecord,
+  PageView,
 };
 
 export default models;

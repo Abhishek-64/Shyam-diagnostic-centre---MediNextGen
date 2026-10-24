@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, CheckCircle2, XCircle, FolderOpen, Loader2 } from 'lucide-react';
 import api from '../../services/api.js';
 import Modal from '../../components/common/Modal.jsx';
+import LoadingSpinner from '../../components/common/LoadingSpinner.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
 import styles from './AdminCategoriesPage.module.css';
 
@@ -143,11 +144,7 @@ export default function AdminCategoriesPage() {
             </thead>
             <tbody>
               {loading ? (
-                <tr>
-                  <td colSpan={5} style={{ textAlign: 'center', padding: '2rem' }}>
-                    Loading categories...
-                  </td>
-                </tr>
+                <LoadingSpinner variant="table" colSpan={5} label="Loading diagnostic categories…" />
               ) : categories.length > 0 ? (
                 categories.map((cat) => (
                   <tr key={cat.id}>

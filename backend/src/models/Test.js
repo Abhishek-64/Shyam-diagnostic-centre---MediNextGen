@@ -76,6 +76,26 @@ export default function defineTest(sequelize) {
         allowNull: false,
         defaultValue: false, // Default unpublished until confirmed
       },
+      showPriceOnWebsite: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+      showSampleType: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+      showReportingTime: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+      showPreparationInstructions: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
     },
     {
       tableName: 'tests',

@@ -5,6 +5,8 @@ import {
   createAdminTest,
   updateAdminTest,
   deleteAdminTest,
+  bulkImportTestsFromCsv,
+  getSampleTestsCsv,
 } from '../../controllers/admin/tests.controller.js';
 import { authenticateAdmin } from '../../middlewares/auth.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
@@ -13,6 +15,9 @@ import { testSchema } from '../../validators/test.validator.js';
 const router = Router();
 
 router.use(authenticateAdmin);
+
+router.get('/sample-csv', getSampleTestsCsv);
+router.post('/bulk-csv', bulkImportTestsFromCsv);
 
 router.get('/', getAdminTests);
 router.get('/:id', getAdminTestById);

@@ -2,10 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Droplet, Clock, ArrowRight } from 'lucide-react';
 import PriceDisplay from '../common/PriceDisplay.jsx';
-import WhatsAppButton from '../common/WhatsAppButton.jsx';
+import { useSettings } from '../../context/SettingsContext.jsx';
 import styles from './TestCard.module.css';
 
 export default function TestCard({ test, onEnquireClick }) {
+  const { settings } = useSettings();
   if (!test) return null;
 
   return (
@@ -25,13 +26,13 @@ export default function TestCard({ test, onEnquireClick }) {
       {test.shortDescription && <p className={styles.desc}>{test.shortDescription}</p>}
 
       <div className={styles.metaRow}>
-        {test.sampleType && (
+        {test.showSampleType !== false && test.sampleType && (
           <div className={styles.metaItem}>
             <Droplet size={13} className={styles.metaIcon} />
             <span>{test.sampleType}</span>
           </div>
         )}
-        {test.reportingTime && (
+        {test.showReportingTime !== false && test.reportingTime && (
           <div className={styles.metaItem}>
             <Clock size={13} className={styles.metaIcon} />
             <span>{test.reportingTime}</span>
@@ -40,11 +41,17 @@ export default function TestCard({ test, onEnquireClick }) {
       </div>
 
       <div className={styles.priceRow}>
-        <PriceDisplay
-          priceInPaise={test.priceInPaise}
-          originalPriceInPaise={test.discountPriceInPaise}
-          size="sm"
-        />
+        {test.showPriceOnWebsite !== false ? (
+          <PriceDisplay
+            priceInPaise={test.priceInPaise}
+            originalPriceInPaise={test.discountPriceInPaise}
+            size="sm"
+          />
+        ) : (
+          <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--color-primary)' }}>
+            Contact Centre for Rate
+          </span>
+        )}
       </div>
 
       <div className={styles.actions}>
@@ -56,7 +63,7 @@ export default function TestCard({ test, onEnquireClick }) {
         </button>
 
         <WhatsAppButton
-          phone="8320740996"
+          phone={settings.whatsapp_number}
           message={`Hello Shyam Diagnostic, I would like to book the *${test.name}* test.`}
           variant="iconOnly"
           size="sm"

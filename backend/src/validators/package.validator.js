@@ -16,6 +16,10 @@ export const packageSchema = z.object({
   priceVerified: z.boolean().default(false),
   isPublished: z.boolean().default(false),
   displayOrder: z.coerce.number().int().default(0),
+  showPriceOnWebsite: z.boolean().default(true),
+  showOriginalPrice: z.boolean().default(true),
+  showFastDuration: z.boolean().default(true),
+  showReportTime: z.boolean().default(true),
   testIds: z.array(z.coerce.number().int().positive()).optional(),
 }).refine((data) => {
   // RULE: cannot be published if priceVerified is false

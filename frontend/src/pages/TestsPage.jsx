@@ -7,6 +7,7 @@ import SearchBar from '../components/common/SearchBar.jsx';
 import Pagination from '../components/common/Pagination.jsx';
 import Modal from '../components/common/Modal.jsx';
 import EnquiryForm from '../components/forms/EnquiryForm.jsx';
+import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
 import styles from './TestsPage.module.css';
 
 export default function TestsPage() {
@@ -125,9 +126,12 @@ export default function TestsPage() {
 
       <div className="container">
         {loading ? (
-          <div className={styles.loadingBox}>
-            <p>Loading diagnostic tests catalogue...</p>
-          </div>
+          <LoadingSpinner
+            size="lg"
+            label="Loading diagnostic tests catalogue…"
+            sublabel="Accessing over 2,000+ pathology tests with NABL protocols"
+            variant="center"
+          />
         ) : tests.length > 0 ? (
           <>
             <div className={styles.grid}>

@@ -13,6 +13,7 @@ import {
   History,
   ExternalLink,
   Activity,
+  Users,
 } from 'lucide-react';
 import styles from './AdminSidebar.module.css';
 
@@ -23,6 +24,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
     { label: 'Health Packages', path: '/admin/packages', icon: Package },
     { label: 'Tests Directory', path: '/admin/tests', icon: FlaskConical },
     { label: 'Test Categories', path: '/admin/categories', icon: Tags },
+    { label: 'Visitor Analytics', path: '/admin/analytics', icon: Users },
     { label: 'Site Settings', path: '/admin/settings', icon: Settings },
   ];
 
@@ -32,11 +34,11 @@ export default function AdminSidebar({ isOpen, onClose }) {
       <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
         <div className={styles.brand}>
           <div className={styles.logoIcon}>
-            <Activity size={20} />
+            <img src="/logo.png" alt="MediNextGen Logo" className={styles.logoIconImg} />
           </div>
           <div className={styles.brandMeta}>
-            <span className={styles.name}>SDC Admin</span>
-            <span className={styles.role}>Management Console</span>
+            <span className={styles.name}>Shyam Diagnostic</span>
+            <span className={styles.role}>MediNextGen Admin</span>
           </div>
         </div>
 
