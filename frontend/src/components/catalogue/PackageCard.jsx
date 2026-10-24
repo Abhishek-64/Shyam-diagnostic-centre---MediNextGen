@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Clock, ShieldCheck, Activity, ArrowRight, Sparkles } from 'lucide-react';
 import PriceDisplay from '../common/PriceDisplay.jsx';
 import VerificationBadge from '../common/VerificationBadge.jsx';
+import WhatsAppButton from '../common/WhatsAppButton.jsx';
 import { useSettings } from '../../context/SettingsContext.jsx';
 import styles from './PackageCard.module.css';
 

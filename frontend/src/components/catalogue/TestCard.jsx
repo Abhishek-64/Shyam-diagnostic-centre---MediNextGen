@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Droplet, Clock, ArrowRight } from 'lucide-react';
 import PriceDisplay from '../common/PriceDisplay.jsx';
+import WhatsAppButton from '../common/WhatsAppButton.jsx';
 import { useSettings } from '../../context/SettingsContext.jsx';
 import styles from './TestCard.module.css';
 
